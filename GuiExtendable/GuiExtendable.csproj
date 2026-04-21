@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)\Mods\mod</OutputPath>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="modinfo.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="modicon.png" Condition="Exists('modicon.png')">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="cairo-sharp">
+		  <HintPath>..\..\..\..\Games\Vintagestory\Lib\cairo-sharp.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
+		<Reference Include="VintagestoryAPI">
+			<HintPath>..\..\..\..\Games\Vintagestory\VintagestoryAPI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VintagestoryLib">
+			<HintPath>..\..\..\..\Games\Vintagestory\VintagestoryLib.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="assets\guiextendable\lang\" />
+	</ItemGroup>
+
+</Project>

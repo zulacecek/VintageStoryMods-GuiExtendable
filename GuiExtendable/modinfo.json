@@ -1,0 +1,14 @@
+{
+    "$schema": "https://moddbcdn.vintagestory.at/schema/modinfo.latest.json",
+    "type": "Code",
+    "modid": "guiextendable",
+    "name": "GuiExtendable",
+    "authors": [
+        "zulacecek"
+    ],
+    "description": "Exposes and streamlines Gui extensions",
+    "version": "1.0.0",
+    "dependencies": {
+        "game": "1.21.0"
+    }
+}

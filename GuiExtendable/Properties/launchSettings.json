@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Client": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "\"C:/Games/Vintagestory/Vintagestory.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --addOrigin \"$(ProjectDir)/assets\"",
+      "workingDirectory": "$(VINTAGE_STORY)",
+      "environmentVariables": {
+        "ProjectDir": "C:\\Code\\VSmods\\GuiExtendable\\GuiExtendable"
+      },
+      "nativeDebugging": true
+    },
+    "Server": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "\"$(VINTAGE_STORY)/VintagestoryServer.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" --addOrigin \"$(ProjectDir)/assets\"",
+      "workingDirectory": "$(VINTAGE_STORY)"
+    }
+  }
+}
