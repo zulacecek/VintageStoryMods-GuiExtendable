@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Vintagestory.API.Client;
@@ -18,7 +19,7 @@ namespace GuiExtendable.ExtendableGuiDialogs
         public GuiDialogCharacterExtendable(ICoreClientAPI capi)
             : base(capi)
         {
-            rendertabhandlers.Add(ComposeCharacterTab);
+            rendertabhandlers = [ComposeCharacterTabCustom];
         }
 
         public virtual double UnscaledSlotPadding => GuiElementItemSlotGridBase.unscaledSlotPadding;
@@ -55,13 +56,29 @@ namespace GuiExtendable.ExtendableGuiDialogs
             set => showArmorSlots = value;
         }
 
-        public int CurrentTab { get; set; }
+        public int CurrentTab
+        {
+            get => curTab;
+            set => curTab = value;
+        }
 
-        public Size2d MainTabInnerSize { get; set; } = new Size2d();
+        public Size2d MainTabInnerSize
+        {
+            get => mainTabInnerSize;
+            set => mainTabInnerSize = value;
+        }
 
-        public Vec4f LightPosition { get; set; } = new Vec4f(-1f, -1f, 0f, 0f).NormalizeXYZ();
+        public Vec4f LightPosition
+        {
+            get => lighPos;
+            set => lighPos = value;
+        }
 
-        public Matrixf Matrix { get; set; } = new Matrixf();
+        public Matrixf Matrix
+        {
+            get => mat;
+            set => mat = value;
+        }
 
         public override event Action? ComposeExtraGuis;
 
@@ -86,7 +103,7 @@ namespace GuiExtendable.ExtendableGuiDialogs
 
         public virtual bool ShouldRegisterArmorIcons => !capi.Gui.Icons.CustomIcons.ContainsKey("left_hand");
 
-        public virtual void ComposeCharacterTab(GuiComposer composer)
+        public virtual void ComposeCharacterTabCustom(GuiComposer composer)
         {
             TryRegisterArmorIcons();
 
@@ -166,7 +183,7 @@ namespace GuiExtendable.ExtendableGuiDialogs
             Composers[CharacterComposerName] = capi.Gui.CreateCompo(CharacterComposerName, composerBaseElementBounds)
                 .AddShadedDialogBG(backgroundElementBounds)
                 .AddDialogTitleBar(characterNameAndClassText, OnTitleBarClose)
-                .AddHorizontalTabs([.. Tabs], tabsElementBounds, OnTabClicked, font, font, tabsKey)
+                .AddHorizontalTabs([.. Tabs], tabsElementBounds, OnTabClickedCustom, font, font, tabsKey)
                 .BeginChildElements(backgroundElementBounds);
 
             Composers[CharacterComposerName].GetHorizontalTabs(tabsKey).activeElement = CurrentTab;
@@ -203,7 +220,7 @@ namespace GuiExtendable.ExtendableGuiDialogs
             }
         }
 
-        public virtual void OnTabClicked(int tabindex)
+        public virtual void OnTabClickedCustom(int tabindex)
         {
             TabClicked?.Invoke(tabindex);
             CurrentTab = tabindex;
@@ -233,14 +250,13 @@ namespace GuiExtendable.ExtendableGuiDialogs
 
         public override void OnRenderGUI(float deltaTime)
         {
-            base.OnRenderGUI(deltaTime);
-
             TryRenderEntity(deltaTime);
+            base.OnRenderGUI(deltaTime);
         }
 
         public void TryRenderEntity(float deltaTime)
         {
-            if (!RenderEntityOnTabIds.Contains(CurrentTab))
+            if (!RenderEntityOnTabIds.Contains(CurrentTab) || CurrentTab == 0)
             {
                 return;
             }
@@ -288,6 +304,11 @@ namespace GuiExtendable.ExtendableGuiDialogs
             {
                 CharacterInventory.Open(capi.World.Player);
             }
+        }
+
+        public override bool TryOpen()
+        {
+            return base.TryOpen();
         }
 
         public override void OnGuiClosed()
